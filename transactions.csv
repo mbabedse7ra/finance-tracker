@@ -1,2 +1,5 @@
 type,amount,category,date,description
 income,3200.0,salary,2026-05-19,Monthly salary
+expense,1200.0,bank,2026-05-19,Monthly credit
+income,3200.0,salary,2026-05-19,Monthly salary
+expense,1200.0,bank,2026-05-19,Monthly credit

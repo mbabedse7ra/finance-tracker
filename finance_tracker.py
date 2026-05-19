@@ -27,6 +27,7 @@ def save_transaction(t):
         writer.writerow([t.type, t.amount, t.category, t.date, t.description])
 
 save_transaction(person_1)
+save_transaction(person_2)
 
 def load_transaction():
     transactions = []
@@ -48,3 +49,28 @@ def show_transactions(transactions):
         print(f"{t.date:<12} {t.type:<10} {t.category:<15} {t.amount:<10} {t.description}")
 
 show_transactions(load_transaction())
+
+def get_balance(transactions):
+    balance = sum([t.amount for t in transactions if t.type == "income"] ) - sum([t.amount for t in transactions if t.type == "expense"] )
+    return balance
+
+def get_summary(transactions):
+    total_income = sum([t.amount for t in transactions if t.type == "income"] )
+    total_expenses = sum([t.amount for t in transactions if t.type == "expense"] )
+    balance = total_income - total_expenses
+    return f"Total income: {total_income}\n Total expenses: {total_expenses}\n Balance: {balance}"
+
+def get_by_category(transactions):
+    categories = {}
+    for t in transactions:
+        if t.category not in categories:
+            categories[t.category] = 0
+        categories[t.category] += t.amount
+
+    for category, total in categories.items():
+        print(f"{category:<15}: {total}€")
+    
+
+transactions = load_transaction()
+print(get_summary(transactions))
+get_by_category(transactions)
