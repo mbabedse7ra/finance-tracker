@@ -15,9 +15,6 @@ class Transaction:
     def display(self):
         return f"[{self.date}] {self.type} | {self.category} | {abs(self.amount)} | {self.description}"
     
-person_1 = Transaction("income", 3200, "salary", "Monthly salary")
-person_2 = Transaction("expense", 1200, "bank", "Monthly credit")
-
 def save_transaction(t):
     file_exists = os.path.exists("transactions.csv")
     with open("transactions.csv", "a", newline="") as f:
@@ -25,9 +22,6 @@ def save_transaction(t):
         if not file_exists:
             writer.writerow(["type", "amount", "category", "date", "description"])  # header
         writer.writerow([t.type, t.amount, t.category, t.date, t.description])
-
-save_transaction(person_1)
-save_transaction(person_2)
 
 def load_transaction():
     transactions = []
@@ -48,8 +42,6 @@ def show_transactions(transactions):
     for t in transactions:
         print(f"{t.date:<12} {t.type:<10} {t.category:<15} {t.amount:<10} {t.description}")
 
-show_transactions(load_transaction())
-
 def get_balance(transactions):
     balance = sum([t.amount for t in transactions if t.type == "income"] ) - sum([t.amount for t in transactions if t.type == "expense"] )
     return balance
@@ -69,8 +61,36 @@ def get_by_category(transactions):
 
     for category, total in categories.items():
         print(f"{category:<15}: {total}€")
-    
 
-transactions = load_transaction()
-print(get_summary(transactions))
-get_by_category(transactions)
+def add_transaction(transactions):
+    type = input("Type (income/expense): ")
+    amount = input("Amount: ")
+    category = input("Category: ")
+    description = input("Description: ")
+    t = Transaction(type, float(amount), category, description)
+    transactions.append(t)
+    save_transaction(t)
+    print("Transaction added!")
+
+def main():
+    transactions = load_transaction()
+    while True:
+        print("=" * 30)
+        print("  Personal Finance Tracker")
+        print("=" * 30)
+        print(f"1. Add transaction\n 2. Show all transactions\n 3. Show summary\n 4. Show by category\n 5. Quit")
+        choice = input("Choose an option: ")
+        if choice == "1":
+            add_transaction(transactions)
+        elif choice == "2":
+            show_transactions(transactions)
+        elif choice == "3":
+            print(get_summary(transactions))
+        elif choice == "4":
+            get_by_category(transactions)
+        elif choice == "5":
+            break
+        else:
+            print("Invalid option, please choose between 1 and 5.")
+
+main()
